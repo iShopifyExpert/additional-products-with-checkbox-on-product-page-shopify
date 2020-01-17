@@ -1,0 +1,73 @@
+<div class="add-box"> <ul class="list-unstyled"> <li> <input class="checkbox" type="checkbox" name="add-on-7" value="1488.00"> <span>Add <a href="/products/sleepthetic%E2%84%A2-adjustable-bed-base">Adjustable Bed Base</a></span> <select class="variant-select" name="vblank"> <option value="" data-price="0" data-cprice="0" data-affirm="0">Select</option> <option value="20641552564294" data-sku="STABB-01DD" data-price="1488.00" data-cprice="3688.00" data-splitit="568.00">Split King (2 X Single)</option> <option value="20641552597062" data-sku="STABB-01B" data-price="988.00" data-cprice="2888.00" data-splitit="568.00">Queen</option> <option value="20641552629830" data-sku="STABB-01C" data-price="868.00" data-cprice="1688.00" data-splitit="568.00">Super Single</option> <option value="20641552662598" data-sku="STABB-01D" data-price="788.00" data-cprice="1488.00" data-splitit="568.00">Single</option></select> <span class="com-price">$3,688.00</span> <span class="offer-price">$1,488.00</span></li> <li> <input class="checkbox" type="checkbox" name="add-on-8" value=""> <span>Add <a href="/products/hotelier-prestigio%E2%84%A2-luxe-pillow-1-2-pcs-free-with-mattx-purchase">Luxe Pillow (1 pcs)</a></span> <select class="variant-select hidev" name="vblank"> <option value="" data-price="0" data-cprice="0" data-affirm="0">Select</option> <option value="20705372274758" data-sku="HLPI-01" data-price="0.00" data-cprice="99.99" data-splitit="568.00">Default Title</option></select> <span class="com-price"></span> <span class="offer-price"></span></li> <li> <input class="checkbox" type="checkbox" name="add-on-9" value="0.00"> <span>Add <a href="/products/hotelier-prestigio%E2%84%A2-fitted-poly-cotton-mattress-protector-free-with-mattress-purchase">Mattress Protector</a></span> <select class="variant-select" name="vblank"> <option value="" data-price="0" data-cprice="0" data-affirm="0">Select</option> <option value="20705339998278" data-sku="MP-02AFREE" data-price="0.00" data-cprice="79.00" data-splitit="568.00">King</option> <option value="20705340031046" data-sku="MP-02BFREE" data-price="0.00" data-cprice="76.00" data-splitit="568.00">Queen</option> <option value="20705340063814" data-sku="MP-02CFREE" data-price="0.00" data-cprice="69.00" data-splitit="568.00">Super Single</option> <option value="20705340096582" data-sku="MP-02DFREE" data-price="0.00" data-cprice="67.00" data-splitit="568.00">Single</option></select> <span class="com-price">$79.00</span> <span class="offer-price">Free</span></li></ul></div>
+<div class="price-container row"> <div class="col-sm-5 price-content"> <span>Pay Now</span> <span class="discount-price" id="total-price">$899.00</span> <span class="compare-price">$1,899.00</span></div> <div class="col-sm-7 checkout-content"> <div class="affirm_divs"> <span>As Low as</span> <span class="affirm-as-low-as"><a class="affirm-modal-trigger" href="javascript:void(0)">As low as <span class="affirm-ala-price splitit-price" id="splitit-price">$224.75</span>/mo at 0% APR</a></span> <a class="affirm-modal-trigger" href="javascript:void(0)"><img class="img-responsive" src="//cdn.shopify.com/s/files/1/0071/9575/4566/t/14/assets/splitit-logo.png?v=8915872018174135997" alt="Splitit" style="max-height: 48px;margin: 0 auto;"></a></div></div></div>
+<script type="text/javascript">
+  
+  jQuery(function ($) {
+    $('.select0 select').niceSelect();
+
+    $('.select0 select').on('change', function() {
+      var discountedPrice = ($('.select0 select').find(":selected").attr("data-price")*1);
+      var comparedPrice = $('.select0 select').find(":selected").attr("data-cprice");
+      discountedPrice += get_variant_price();
+      discountedPrice = discountedPrice.toFixed(2);
+      var splitit = discountedPrice / 4;
+      $("span.splitit-price").text('$'+splitit);
+      $(".price-content .discount-price").text(Shopify.formatMoney(discountedPrice, "${{amount}}"));
+      $(".price-content .compare-price").text(comparedPrice);
+    });
+  });
+  
+  function get_variant_price(){
+    var variant_price = 0;
+    var compare_price = 0;
+    $(".variant-select").each(function(){
+      var totl = $(this).find("option:selected").data('price');
+      var ctotl = $(this).find("option:selected").data('cprice');
+      if($(this).find("option:selected").data('price') != null && $(this).find("option:selected").data('price') !=""){
+        if($(this).closest("li").find(".checkbox").is(":checked")){
+          variant_price += ($(this).find("option:selected").data('price')*1);
+          compare_price += ($(this).find("option:selected").data('cprice')*1);
+          $(this).closest("li").find(".offer-price").html(Shopify.formatMoney(totl, "${{amount}}"));
+          $(this).closest("li").find(".com-price").html(Shopify.formatMoney(ctotl, "${{amount}}"));
+        }
+      }
+    });
+    return variant_price;
+  }
+
+  $(document).on("change", ".variant-select", function() {
+    var totalprice = ($('.select0 select').find(":selected").attr("data-price")*1);
+    totalprice += get_variant_price();
+    totalprice = totalprice.toFixed(2);
+    var splitit = totalprice / 4;
+    $("span.splitit-price").text('$'+splitit);
+    $('.discount-price').text(Shopify.formatMoney(totalprice, "${{amount}}"));
+  });
+  
+  jQuery(function ($) {
+    $(".variant-select option").filter(function() {
+      return $(this).val() == $(".add-on-product-value").val();
+    }).attr('selected', true);
+    $(".variant-select").on("change", function() {
+      $(".add-on-product-value").val($(this).find("option:selected").attr("value"));
+    });
+    $('.add-box li .checkbox').on('change', function(){
+      var total = ($('.select0 select').find(":selected").attr("data-price")*1);
+      $(this).siblings(".variant-select").prop("selectedIndex", 0);
+      if($(this).prop("checked") == true){
+        $(this).siblings(".variant-select").css("display", "inline-block");
+        $(this).siblings(".variant-select").prop("selectedIndex", 1);
+        $(this).siblings(".variant-select").attr('name', 'id[]');
+      }else{
+        $(this).siblings(".variant-select").css("display", "none");
+        $(this).siblings(".variant-select").find('option:eq(0)').prop('selected', true);
+        $(this).siblings(".variant-select").attr('name', 'vblank');
+      }
+      total += get_variant_price();
+      total = total.toFixed(2);
+      var splitit = total / 4;
+      $("span.splitit-price").text('$'+splitit);
+      $(".price-content .discount-price").text(Shopify.formatMoney(total, "${{amount}}"));
+    });
+  });
+</script>
